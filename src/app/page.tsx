@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { auth } from "./actions";
 
@@ -15,8 +16,20 @@ export default function Page() {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
+  // server-actions
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     await auth(data);
+  };
+
+  // API Endpoint
+  const onSubmitAPI: SubmitHandler<FormFields> = async (data) => {
+    const res = await axios
+      .post("/api/auth/login", {
+        data,
+      })
+      .catch((err: unknown) => {
+        throw new Error("Sth went wrong");
+      });
   };
 
   return (
